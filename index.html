@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FabHotels OCM Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .container { background: white; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); padding: 40px; max-width: 600px; width: 100%; }
+        h1 { color: #1a1a4e; font-size: 24px; margin-bottom: 8px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 13px; color: #333; }
+        input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; transition: border-color 0.2s; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #1a1a4e; }
+        textarea { resize: vertical; min-height: 70px; }
+        .row { display: flex; gap: 12px; }
+        .row .form-group { flex: 1; }
+        button { width: 100%; padding: 14px; background: #1a1a4e; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+        button:hover { background: #2d2d7f; }
+        .fab-logo { font-weight: bold; font-size: 28px; color: #1a1a4e; margin-bottom: 4px; }
+        .format-selector { display: flex; gap: 10px; margin-bottom: 20px; }
+        .format-option { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s; }
+        .format-option.active { border-color: #1a1a4e; background: #f0f0ff; }
+        .format-option h3 { font-size: 13px; margin-bottom: 4px; }
+        .format-option p { font-size: 11px; color: #666; }
+        .field-forwarder { display: none; }
+        .show-forwarder .field-forwarder { display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="fab-logo">fabHOTELS</div>
+        <h1>OCM Generator</h1>
+        <p class="subtitle">Generate Owner Confirmation Mail (Letter of Authorization) PDFs</p>
+
+        <div class="format-selector">
+            <div class="format-option active" data-format="1">
+                <h3>Format 1</h3>
+                <p>Direct mail to FabHotels (TRAVELSTACK TECH LIMITED)</p>
+            </div>
+            <div class="format-option" data-format="2">
+                <h3>Format 2</h3>
+                <p>Forwarded mail (OTA listing, remove parallel listings)</p>
+            </div>
+        </div>
+
+        <form id="ocmForm">
+            <div class="form-group">
+                <label>Owner Name</label>
+                <input type="text" id="ownerName" placeholder="e.g. AJAY BASUDEO YADAV" required>
+            </div>
+            <div class="form-group">
+                <label>Hotel Name</label>
+                <input type="text" id="hotelName" placeholder="e.g. Hotel Byland International" required>
+            </div>
+            <div class="form-group">
+                <label>Full Address</label>
+                <textarea id="address" placeholder="Street, Area, City, State, Pincode" required></textarea>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>City (for onboarding)</label>
+                    <input type="text" id="city" placeholder="e.g. Mumbai" required>
+                </div>
+                <div class="form-group">
+                    <label>Authorization Date</label>
+                    <input type="date" id="authDate" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label>Owner Email</label>
+                    <input type="email" id="ownerEmail" placeholder="owner@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Owner Phone</label>
+                    <input type="tel" id="ownerPhone" placeholder="9987743404" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Email Subject</label>
+                <input type="text" id="emailSubject" placeholder="e.g. Letter of Authorization" value="Letter of Authorization">
+            </div>
+            <button type="submit">Generate OCM PDF</button>
+        </form>
+    </div>
+    <script>
+        let selectedFormat = 1;
+
+        document.querySelectorAll('.format-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.format-option').forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                selectedFormat = parseInt(opt.dataset.format);
+            });
+        });
+
+        document.getElementById('authDate').valueAsDate = new Date();
+
+        document.getElementById('ocmForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const ownerName = document.getElementById('ownerName').value;
+            const hotelName = document.getElementById('hotelName').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const authDate = new Date(document.getElementById('authDate').value);
+            const ownerEmail = document.getElementById('ownerEmail').value;
+            const ownerPhone = document.getElementById('ownerPhone').value;
+
+            const dateStr = authDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-');
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const dateDisplay = `${days[authDate.getDay()]}, ${months[authDate.getMonth()]} ${authDate.getDate()}, ${authDate.getFullYear()} at 1:16 PM`;
+            const dateFwd = `${days[authDate.getDay()]}, ${authDate.getDate()} ${months[authDate.getMonth()].substring(0,3)} ${authDate.getFullYear()} 18:10:52 +0530`;
+
+            const emailSubject = document.getElementById('emailSubject').value;
+
+            if (selectedFormat === 1) {
+                generateFormat1(doc, { ownerName, hotelName, address, city, ownerEmail, ownerPhone, dateStr, dateDisplay, authDateObj: authDate, emailSubject });
+            } else {
+                generateFormat2(doc, { ownerName, hotelName, address, city, ownerEmail, ownerPhone, dateStr, dateDisplay, dateFwd, emailSubject });
+            }
+
+            doc.save(`FabHotel ${hotelName} OCM.pdf`);
+        });
+
+        function generateFormat1(doc, d) {
+            // Header
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            const topDateStr = `${String(d.authDateObj.getDate()).padStart(2,'0')}/${String(d.authDateObj.getMonth()+1).padStart(2,'0')}/${d.authDateObj.getFullYear()}, 1:16 PM`;
+            doc.text(topDateStr, 10, 12);
+            doc.text(`FabHotels Mail - ${d.emailSubject} Date: ${d.dateStr}`, 200, 12, { align: 'right' });
+
+            // Logo
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(26, 26, 78);
+            doc.text('fabHOTELS', 10, 28);
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Abhijeet Yadav <abhijeet.yadav@fabhotels.com>', 200, 28, { align: 'right' });
+
+            doc.line(10, 33, 200, 33);
+
+            // Subject
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${d.emailSubject} Date: ${d.dateStr}`, 10, 42);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('1 message', 10, 48);
+
+            // From
+            doc.setFont('helvetica', 'bold');
+            doc.text(`${d.hotelName}<${d.ownerEmail}>`, 10, 56);
+            doc.setFont('helvetica', 'normal');
+            doc.text(d.dateDisplay, 200, 56, { align: 'right' });
+            doc.text('To: "abhijeet.yadav@fabhotels.com"<abhijeet.yadav@fabhotels.com>', 10, 62);
+
+            // Body
+            let y = 74;
+            doc.setFontSize(11);
+            doc.text('To Whom It May Concern,', 10, y);
+            y += 10;
+
+            const body1 = `I, ${d.ownerName} owner of ${d.hotelName}, ${d.address}, hereby declare and authorize the appointment of Fabhotels (TRAVELSTACK TECH LIMITED) as the exclusive manager for the distribution of our inventory, rates, and hotel information on online sales channels in India, effective from the date of this letter.`;
+            const lines1 = doc.splitTextToSize(body1, 180);
+            doc.text(lines1, 10, y);
+            y += lines1.length * 6 + 6;
+
+            const body2 = 'I confirm that I have terminated all contracts with any other Property Management Companies (PMCs) regarding the management of our online distribution.';
+            const lines2 = doc.splitTextToSize(body2, 180);
+            doc.text(lines2, 10, y);
+            y += lines2.length * 6 + 6;
+
+            const body3 = 'Furthermore, I consent and agree that Fabhotels has the right to migrate reviews and ratings from any previous listings on Online Travel Agencies (OTAs) to new listings created under their management.';
+            const lines3 = doc.splitTextToSize(body3, 180);
+            doc.text(lines3, 10, y);
+            y += lines3.length * 6 + 6;
+
+            const body4 = `I hereby authorize Fabhotels to onboard ${d.hotelName} located in ${d.city} under their chain. This authorization is effective immediately and supersedes any prior agreements or arrangements.`;
+            const lines4 = doc.splitTextToSize(body4, 180);
+            doc.text(lines4, 10, y);
+            y += lines4.length * 6 + 12;
+
+            doc.text('Sincerely,', 10, y);
+            y += 10;
+            doc.text(d.ownerName, 10, y);
+            y += 8;
+            doc.text(d.ownerPhone, 10, y);
+
+            // Footer
+            doc.setFontSize(7);
+            doc.line(10, 280, 200, 280);
+            doc.text('https://mail.google.com/mail/u/1/?ik=4686ac7f4a&view=pt&search=all&permthid=thread-f:1842611719410401184&simpl=msg-f:1832641951487446364   1/1', 10, 284);
+        }
+
+        function generateFormat2(doc, d) {
+            // Date formats
+            const fwdDateTime = `${d.dateDisplay.replace(' at 1:16 PM', '')} 3:59:35 PM +0530`;
+            const topLeft = `${d.dateStr.split('-').reverse().join('/')}, 3:59 PM`;
+
+            // Header
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(topLeft, 10, 12);
+            doc.text(`Fwd: ${d.emailSubject}`, 105, 12, { align: 'center' });
+
+            // Title row
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Fwd: ${d.emailSubject}`, 10, 26);
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Abhijeet Yadav', 200, 22, { align: 'right' });
+            doc.setFont('helvetica', 'normal');
+            doc.text('< abhijeet.yadav@fabhotels.com >', 200, 28, { align: 'right' });
+
+            // Email box
+            doc.setDrawColor(200, 200, 200);
+            doc.rect(14, 36, 182, 50);
+
+            let y = 44;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Abhijeet Yadav < abhijeet.yadav@fabhotels.com >', 18, y);
+            y += 6;
+            doc.setFont('helvetica', 'normal');
+            doc.text(fwdDateTime, 18, y);
+            y += 8;
+            doc.text('To "otateam"<otateam@fabhotels.com>', 22, y);
+            y += 8;
+            doc.text('Fyi', 18, y);
+            y += 6;
+            doc.text('Abhijeet Yadav', 18, y);
+
+            // Forwarded message
+            y = 94;
+            doc.text('============ Forwarded Message ============', 10, y);
+            y += 6;
+            doc.text(`From : ${d.ownerEmail}`, 10, y);
+            y += 5;
+            doc.text('To : abhijeet.yadav@fabhotels.com', 10, y);
+            y += 5;
+            doc.text(`Date : ${fwdDateTime}`, 10, y);
+            y += 5;
+            doc.text(`Subject : ${d.emailSubject}`, 10, y);
+            y += 5;
+            doc.text('============ Forwarded Message ============', 10, y);
+            y += 8;
+
+            doc.text("Subject: Authorization for Listing on OTA'S under FabHotels", 10, y);
+            y += 6;
+            doc.text('To Whom It May Concern,', 10, y);
+            y += 8;
+
+            doc.setFontSize(11);
+            const body1 = `I, ${d.ownerName}, owner of ${d.hotelName}, located at ${d.address}, hereby confirm my association with FabHotels and list my property exclusively on OTA'S under FabHotels' management. FabHotels will handle the distribution of our inventory, rates, and hotel information on the OTA'S platform.`;
+            const lines1 = doc.splitTextToSize(body1, 180);
+            doc.text(lines1, 10, y);
+            y += lines1.length * 6 + 6;
+
+            const body2 = "I also request the removal of any parallel listings of my property on OTA'S, whether standalone or associated with other chains such as OYO or Treebo. Additionally, I request you to list my property under FabHotels on priority.";
+            const lines2 = doc.splitTextToSize(body2, 180);
+            doc.text(lines2, 10, y);
+            y += lines2.length * 6 + 6;
+
+            const body3 = "Furthermore, I consent to FabHotels migrating reviews and ratings from any previous listings on OTA'S to the new listing created under their management.";
+            const lines3 = doc.splitTextToSize(body3, 180);
+            doc.text(lines3, 10, y);
+            y += lines3.length * 6 + 6;
+
+            const body4 = 'This authorization is effective immediately and supersedes any prior agreements or arrangements.';
+            const lines4 = doc.splitTextToSize(body4, 180);
+            doc.text(lines4, 10, y);
+            y += lines4.length * 6 + 8;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text(d.ownerName, 10, y);
+            y += 6;
+            doc.setFont('helvetica', 'normal');
+            doc.text(d.ownerPhone, 10, y);
+            y += 6;
+            doc.text(d.hotelName, 10, y);
+
+            // Footer
+            doc.setFontSize(7);
+            doc.line(10, 280, 200, 280);
+            doc.text('about:blank   1/1', 10, 284);
+        }
+    </script>
+</body>
+</html>
