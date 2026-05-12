@@ -45,6 +45,10 @@
                 <h3>Format 2</h3>
                 <p>Forwarded mail (OTA listing, remove parallel listings)</p>
             </div>
+            <div class="format-option" data-format="3">
+                <h3>Format 3</h3>
+                <p>Zoho Mail print (Casa Stays2 Pvt Ltd)</p>
+            </div>
         </div>
 
         <form id="ocmForm">
@@ -84,6 +88,14 @@
                 <label>Email Subject</label>
                 <input type="text" id="emailSubject" placeholder="e.g. Letter of Authorization" value="Letter of Authorization">
             </div>
+            <div class="form-group field-format3" style="display:none;">
+                <label>Recipient Name</label>
+                <input type="text" id="recipientName" placeholder="e.g. Kiran Kumar" value="Kiran Kumar">
+            </div>
+            <div class="form-group field-format3" style="display:none;">
+                <label>Recipient Email</label>
+                <input type="email" id="recipientEmail" placeholder="e.g. kiran.kumar@fabhotels.com" value="kiran.kumar@fabhotels.com">
+            </div>
             <button type="submit">Generate OCM PDF</button>
         </form>
     </div>
@@ -95,6 +107,9 @@
                 document.querySelectorAll('.format-option').forEach(o => o.classList.remove('active'));
                 opt.classList.add('active');
                 selectedFormat = parseInt(opt.dataset.format);
+                document.querySelectorAll('.field-format3').forEach(el => {
+                    el.style.display = selectedFormat === 3 ? 'block' : 'none';
+                });
             });
         });
 
@@ -121,10 +136,15 @@
 
             const emailSubject = document.getElementById('emailSubject').value;
 
+            const recipientName = document.getElementById('recipientName').value;
+            const recipientEmail = document.getElementById('recipientEmail').value;
+
             if (selectedFormat === 1) {
                 generateFormat1(doc, { ownerName, hotelName, address, city, ownerEmail, ownerPhone, dateStr, dateDisplay, authDateObj: authDate, emailSubject });
-            } else {
+            } else if (selectedFormat === 2) {
                 generateFormat2(doc, { ownerName, hotelName, address, city, ownerEmail, ownerPhone, dateStr, dateDisplay, dateFwd, emailSubject });
+            } else {
+                generateFormat3(doc, { ownerName, hotelName, address, city, ownerEmail, ownerPhone, dateStr, dateDisplay, dateFwd, emailSubject, recipientName, recipientEmail, authDateObj: authDate });
             }
 
             doc.save(`FabHotel ${hotelName} OCM.pdf`);
@@ -295,6 +315,86 @@
             doc.setFontSize(7);
             doc.line(10, 280, 200, 280);
             doc.text('about:blank   1/1', 10, 284);
+        }
+        function generateFormat3(doc, d) {
+            const printDate = `${String(d.authDateObj.getDate()+1).padStart(2,'0')}/${String(d.authDateObj.getMonth()+1).padStart(2,'0')}/${d.authDateObj.getFullYear()}`;
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const emailDate = `${days[d.authDateObj.getDay()]}, ${String(d.authDateObj.getDate()).padStart(2,'0')} ${months[d.authDateObj.getMonth()]} ${d.authDateObj.getFullYear()} 14:40:28 +0530`;
+
+            // Header
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.text(printDate, 10, 15);
+            doc.text('Zoho Mail - Print', 105, 15, { align: 'center' });
+
+            // Email metadata
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            let y = 28;
+            const labelX = 14;
+            const colonX = 42;
+            const valueX = 50;
+
+            doc.text('From', labelX, y);
+            doc.text(':', colonX, y);
+            doc.text(`${d.hotelName}<${d.ownerEmail}>`, valueX, y);
+            y += 7;
+            doc.text('To', labelX, y);
+            doc.text(':', colonX, y);
+            doc.text(`"${d.recipientName}"<${d.recipientEmail}>`, valueX, y);
+            y += 7;
+            doc.text('Subject', labelX, y);
+            doc.text(':', colonX, y);
+            doc.text(`Re: OTA NOC ${d.hotelName}`, valueX, y);
+            y += 7;
+            doc.text('Date', labelX, y);
+            doc.text(':', colonX, y);
+            doc.text(emailDate, valueX, y);
+
+            // Separator
+            y += 12;
+            doc.line(10, y, 200, y);
+            y += 15;
+
+            // Date line
+            doc.setFontSize(11);
+            doc.text(`Date ${d.dateStr}`, 14, y);
+            y += 12;
+
+            // Body
+            doc.text('To Whom It May Concern,', 14, y);
+            y += 12;
+
+            const body1 = `I ${d.ownerName} owner of ${d.hotelName}\n${d.address}, hereby declares and authorizes the appointment of Fabhotels (Casa Stays2 Pvt Ltd) as the exclusive manager for the distribution of our inventory, rates, and hotel information on online sales channels in India, effective from the date of this letter.`;
+            const lines1 = doc.splitTextToSize(body1, 175);
+            doc.text(lines1, 14, y);
+            y += lines1.length * 5.5 + 10;
+
+            const body2 = 'I confirm that I have terminated all contracts with any other Property Management Companies (PMCs) regarding the management of our online distribution.';
+            const lines2 = doc.splitTextToSize(body2, 175);
+            doc.text(lines2, 14, y);
+            y += lines2.length * 5.5 + 10;
+
+            const body3 = 'Furthermore, I consent and agree that Fabhotels has the right to migrate reviews and ratings from any previous listings on Online Travel Agencies (OTAs) to new listings created under their management.';
+            const lines3 = doc.splitTextToSize(body3, 175);
+            doc.text(lines3, 14, y);
+            y += lines3.length * 5.5 + 10;
+
+            const body4 = `I hereby authorize Fabhotels to onboard ${d.hotelName} located in ${d.city}. This authorization is effective immediately and supersedes any prior agreements or arrangements.`;
+            const lines4 = doc.splitTextToSize(body4, 175);
+            doc.text(lines4, 14, y);
+            y += lines4.length * 5.5 + 12;
+
+            doc.text('Sincerely,', 14, y);
+            y += 10;
+            doc.text(d.ownerName, 14, y);
+            y += 8;
+            doc.text(d.ownerPhone, 14, y);
+
+            // Footer
+            doc.setFontSize(8);
+            doc.text('Page 1 of 1', 195, 285, { align: 'right' });
         }
     </script>
 </body>
