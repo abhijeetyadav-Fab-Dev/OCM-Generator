@@ -317,7 +317,8 @@
             doc.text('about:blank   1/1', 10, 284);
         }
         function generateFormat3(doc, d) {
-            const printDate = `${String(d.authDateObj.getDate()+1).padStart(2,'0')}/${String(d.authDateObj.getMonth()+1).padStart(2,'0')}/${d.authDateObj.getFullYear()}`;
+            const nextDay = new Date(d.authDateObj); nextDay.setDate(nextDay.getDate() + 1);
+            const printDate = `${String(nextDay.getDate()).padStart(2,'0')}/${String(nextDay.getMonth()+1).padStart(2,'0')}/${nextDay.getFullYear()}`;
             const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
             const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
             const emailDate = `${days[d.authDateObj.getDay()]}, ${String(d.authDateObj.getDate()).padStart(2,'0')} ${months[d.authDateObj.getMonth()]} ${d.authDateObj.getFullYear()} 14:40:28 +0530`;
