@@ -285,6 +285,52 @@
             background: var(--bg-hover);
         }
 
+        /* ── Form Validation ── */
+        .input-error {
+            border-color: #d32f2f !important;
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.15) !important;
+        }
+        html.dark-mode .input-error {
+            border-color: #ef5350 !important;
+            box-shadow: 0 0 0 3px rgba(239, 83, 80, 0.20) !important;
+        }
+        .field-error {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+        .field-error.show { display: flex; }
+        html.dark-mode .field-error { color: #ef5350; }
+        .validation-banner {
+            display: none;
+            background: #ffebee;
+            border: 1px solid #ef9a9a;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #b71c1c;
+        }
+        .validation-banner.show { display: block; }
+        .validation-banner .banner-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .validation-banner ul {
+            margin: 4px 0 0 18px;
+            padding: 0;
+        }
+        .validation-banner li { margin-bottom: 2px; }
+        html.dark-mode .validation-banner {
+            background: #2a1515;
+            border-color: #5c2a2a;
+            color: #ef9a9a;
+        }
+
         /* ── Protocol info banner ── */
         .protocol-banner {
             background: #fff8e1;
@@ -572,23 +618,28 @@
             <div class="form-group">
                 <label for="ownerName">Owner Name</label>
                 <input type="text" id="ownerName" name="ownerName" placeholder="e.g. AJAY BASUDEO YADAV" autocomplete="name" required>
+                <div class="field-error" id="err-ownerName">⚠️ Owner name is required</div>
             </div>
             <div class="form-group">
                 <label for="hotelName">Hotel Name</label>
                 <input type="text" id="hotelName" name="hotelName" placeholder="e.g. Hotel Byland International" autocomplete="organization" required>
+                <div class="field-error" id="err-hotelName">⚠️ Hotel name is required</div>
             </div>
             <div class="form-group">
                 <label for="address">Full Address</label>
                 <textarea id="address" name="address" placeholder="Street, Area, City, State, Pincode" autocomplete="street-address" required></textarea>
+                <div class="field-error" id="err-address">⚠️ Full address is required</div>
             </div>
             <div class="form-group">
                 <label for="city">City (for onboarding)</label>
                 <input type="text" id="city" name="city" placeholder="e.g. Mumbai" autocomplete="address-level2" required>
+                <div class="field-error" id="err-city">⚠️ City is required</div>
             </div>
             <div class="form-group">
                 <label for="authDate">Authorization Date & Time</label>
                 <div class="datetime-combo">
                     <input type="date" id="authDate" name="authDate" required>
+                    <div class="field-error" id="err-authDate" style="margin-top:8px;">⚠️ Date is required</div>
                     <div class="time-picker">
                         <select id="authHour" name="authHour" aria-label="Hour">
                         </select>
@@ -606,10 +657,12 @@
                 <div class="form-group field-email">
                     <label for="ownerEmail">Owner Email</label>
                     <input type="email" id="ownerEmail" name="ownerEmail" placeholder="owner@gmail.com" autocomplete="email" required>
+                    <div class="field-error" id="err-ownerEmail">⚠️ Owner email is required</div>
                 </div>
                 <div class="form-group field-phone">
                     <label for="ownerPhone">Owner Phone</label>
                     <input type="tel" id="ownerPhone" name="ownerPhone" placeholder="9987743404" autocomplete="tel" required>
+                    <div class="field-error" id="err-ownerPhone">⚠️ Owner phone is required</div>
                 </div>
             </div>
             <div class="form-group">
@@ -619,10 +672,16 @@
             <div class="form-group field-format3" style="display:none;">
                 <label for="recipientName">Recipient Name</label>
                 <input type="text" id="recipientName" name="recipientName" placeholder="e.g. Kiran Kumar" value="Kiran Kumar" autocomplete="off">
+                <div class="field-error" id="err-recipientName">⚠️ Recipient name is required</div>
             </div>
             <div class="form-group field-format3" style="display:none;">
                 <label for="recipientEmail">Recipient Email</label>
                 <input type="email" id="recipientEmail" name="recipientEmail" placeholder="e.g. kiran.kumar@fabhotels.com" value="kiran.kumar@fabhotels.com" autocomplete="off">
+                <div class="field-error" id="err-recipientEmail">⚠️ Recipient email is required</div>
+            </div>
+            <div id="validationBanner" class="validation-banner">
+                <div class="banner-title">⚠️ Please fix the following:</div>
+                <ul id="validationErrors"></ul>
             </div>
             <button type="submit" id="generateBtn">Generate OCM PDF</button>
             <div style="text-align:center;margin-top:6px;">
@@ -939,9 +998,81 @@
             localStorage.removeItem(FORM_KEY);
         });
 
+        /* ── Form validation ── */
+        function clearValidation() {
+            document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            document.querySelectorAll('.field-error.show').forEach(el => el.classList.remove('show'));
+            document.getElementById('validationBanner').classList.remove('show');
+        }
+
+        function validateForm() {
+            clearValidation();
+            const errors = [];
+            const fields = [
+                { id: 'ownerName', errId: 'err-ownerName', label: 'Owner Name' },
+                { id: 'hotelName', errId: 'err-hotelName', label: 'Hotel Name' },
+                { id: 'address', errId: 'err-address', label: 'Full Address' },
+                { id: 'city', errId: 'err-city', label: 'City' },
+                { id: 'authDate', errId: 'err-authDate', label: 'Date' },
+                { id: 'ownerEmail', errId: 'err-ownerEmail', label: 'Owner Email' },
+                { id: 'ownerPhone', errId: 'err-ownerPhone', label: 'Owner Phone' },
+            ];
+
+            // Add format-3 fields if visible
+            if (selectedFormat === 3) {
+                fields.push(
+                    { id: 'recipientName', errId: 'err-recipientName', label: 'Recipient Name' },
+                    { id: 'recipientEmail', errId: 'err-recipientEmail', label: 'Recipient Email' }
+                );
+            }
+
+            fields.forEach(f => {
+                const el = document.getElementById(f.id);
+                const val = el ? el.value.trim() : '';
+                if (!val) {
+                    errors.push(f.label);
+                    if (el) el.classList.add('input-error');
+                    const errEl = document.getElementById(f.errId);
+                    if (errEl) errEl.classList.add('show');
+                }
+            });
+
+            if (errors.length > 0) {
+                const banner = document.getElementById('validationBanner');
+                const list = document.getElementById('validationErrors');
+                list.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
+                banner.classList.add('show');
+                // Scroll to first error
+                const firstError = document.querySelector('.input-error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus({ preventScroll: true });
+                }
+                return false;
+            }
+            return true;
+        }
+
+        // Clear errors in real-time as user types
+        document.querySelectorAll('#ocmForm input, #ocmForm textarea, #ocmForm select').forEach(el => {
+            el.addEventListener('input', function() {
+                this.classList.remove('input-error');
+                const errId = 'err-' + this.id;
+                const errEl = document.getElementById(errId);
+                if (errEl) errEl.classList.remove('show');
+                // Also hide banner if no more errors
+                const remaining = document.querySelectorAll('.input-error').length;
+                if (remaining === 0) {
+                    document.getElementById('validationBanner').classList.remove('show');
+                }
+            });
+        });
+
         /* ── Generate and preview PDF ── */
         document.getElementById('ocmForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            if (!validateForm()) return;
 
             saveFormData();
 
