@@ -455,6 +455,10 @@
                 <button id="ocmUndoBtn" onclick="undoOCMEdit()" disabled title="Undo (Ctrl+Z)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg><span id="ocmUndoCount" class="undo-redo-count"></span></button>
                 <button id="ocmRedoBtn" onclick="redoOCMEdit()" disabled title="Redo (Ctrl+Y)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg><span id="ocmRedoCount" class="undo-redo-count"></span></button>
             </div>
+                    <button class="btn-success btn-sm" onclick="downloadOCMPDF()" style="background:var(--success,#2e7d32);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;padding:7px 14px;width:auto;margin:0;display:inline-flex;align-items:center;gap:4px">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        Download PDF
+                    </button>
                     <button class="btn-primary btn-sm" onclick="downloadOCMText()">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         Download Text
@@ -541,6 +545,7 @@
                         <button id="bulkOcmUndoBtn" onclick="undoBulkOCMEdit()" disabled title="Undo (Ctrl+Z)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg><span id="bulkOcmUndoCount" class="undo-redo-count"></span></button>
                         <button id="bulkOcmRedoBtn" onclick="redoBulkOCMEdit()" disabled title="Redo (Ctrl+Y)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg><span id="bulkOcmRedoCount" class="undo-redo-count"></span></button>
                     </div>
+                    <button onclick="downloadCurrentBulkOCMPDF()" style="padding:6px 14px;border:1px solid var(--success,#2e7d32);border-radius:6px;background:var(--success,#2e7d32);color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px">Download PDF</button>
                     <button onclick="downloadAllBulkOCMs()" style="padding:6px 14px;border:1px solid var(--brand,#2563eb);border-radius:6px;background:var(--brand,#2563eb);color:#fff;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         Download All
@@ -699,7 +704,7 @@
                         <button id="nocUndoBtn" onclick="undoNOCEdit()" disabled title="Undo (Ctrl+Z)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg><span id="nocUndoCount" class="undo-redo-count"></span></button>
                         <button id="nocRedoBtn" onclick="redoNOCEdit()" disabled title="Redo (Ctrl+Y)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg><span id="nocRedoCount" class="undo-redo-count"></span></button>
                     </div>
-                    <button class="btn-primary btn-sm" onclick="downloadNOCText()">
+                    <button class="btn-primary btn-sm" onclick="downloadNOCPDF()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             Download PDF
                         </button>
@@ -754,6 +759,7 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/></svg>
                         Changes
                     </button>
+                        <button onclick="downloadCurrentBulkNOCPDF()" style="padding:6px 14px;border:1px solid var(--success,#2e7d32);border-radius:6px;background:var(--success,#2e7d32);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Download PDF</button>
                         <button onclick="downloadAllBulkNOCs()" style="padding:6px 14px;border:1px solid var(--brand,#2563eb);border-radius:6px;background:var(--brand,#2563eb);color:#fff;font-size:12px;font-weight:600;cursor:pointer">Download All</button>
                     </div>
                 </div>
@@ -2034,6 +2040,269 @@ function redoNOCEdit() { redoEdit(); }
     }
     function undoBulkOCMEdit() { undoEdit(); }
     function redoBulkOCMEdit() { redoEdit(); }
+
+
+/* ===== Download PDF Functions ===== */
+
+/* Single OCM: Save already-generated jsPDF document */
+function downloadOCMPDF(){
+    if(generatedDoc){
+        generatedDoc.save(generatedFileName);
+        showToast('PDF downloaded!');
+    } else {
+        showToast('Generate the OCM first, then download PDF');
+    }
+}
+
+/* Single NOC: Generate and download NOC as PDF */
+function downloadNOCPDF(){
+    var {jsPDF} = window.jspdf;
+    var doc = new jsPDF();
+    var mg = 20;
+    var pageWidth = 210;
+    var bodyWidth = pageWidth - (mg * 2);
+    var y = 20;
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('NO OBJECTION CERTIFICATE', pageWidth / 2, y, {align: 'center'});
+    y += 10;
+
+    var exhibit = document.getElementById('nocExhibit').value || 'EXHIBIT-1';
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(exhibit, pageWidth / 2, y, {align: 'center'});
+    y += 12;
+
+    var nocDate = document.getElementById('nocDate').value;
+    if(nocDate){
+        var d = new Date(nocDate);
+        var dateStr = d.getDate().toString().padStart(2,'0') + '/' + (d.getMonth()+1).toString().padStart(2,'0') + '/' + d.getFullYear();
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Date: ' + dateStr, mg, y);
+        y += 12;
+    }
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('To Whom It May Concern,', mg, y);
+    y += 10;
+
+    var hotelName = document.getElementById('nocHotelName').value || '';
+    var hotelAddress = document.getElementById('nocAddress').value || '';
+    var hotelCompany = document.getElementById('nocHotelCompany').value || hotelName;
+    var lat = document.getElementById('nocLat').value || '';
+    var long_ = document.getElementById('nocLong').value || '';
+    var ownerName = document.getElementById('nocOwnerName').value || '';
+    var designation = document.getElementById('nocDesignation').value || '';
+    var mobile = document.getElementById('nocMobile').value || '';
+    var phone = document.getElementById('nocPhone').value || '';
+    var email = document.getElementById('nocEmail').value || '';
+    var website = document.getElementById('nocWebsite').value || '';
+    var companyName = document.getElementById('nocCompanyName').value || '';
+    var companyPhone = document.getElementById('nocCompanyPhone').value || '';
+    var companyEmail = document.getElementById('nocCompanyEmail').value || '';
+    var companyWebsite = document.getElementById('nocCompanyWebsite').value || '';
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+
+    var p1 = 'I, the undersigned, ' + ownerName + ', ' + designation + ' of ' + hotelName + ', located at ' + hotelAddress + (lat ? ', GPS Coordinates: ' + lat + ', ' + long_ : '') + ', do hereby certify that I have no objection to ' + companyName + ' (including but not limited to their brands such as FabHotels) for the listing and distribution of room inventory and rates of my property on various Online Travel Agencies (OTAs) and other distribution channels.';
+    var l1 = doc.splitTextToSize(p1, bodyWidth);
+    doc.text(l1, mg, y);
+    y += l1.length * 5 + 5;
+
+    var p2 = 'I further authorize ' + companyName + ' to manage the online distribution of my property including but not limited to: listing on OTAs, managing rates and inventory, responding to guest queries, and managing reviews and ratings across platforms.';
+    var l2 = doc.splitTextToSize(p2, bodyWidth);
+    doc.text(l2, mg, y);
+    y += l2.length * 5 + 5;
+
+    var p3 = 'This authorization is valid from the date of this letter and shall remain in effect until revoked in writing by either party.';
+    var l3 = doc.splitTextToSize(p3, bodyWidth);
+    doc.text(l3, mg, y);
+    y += l3.length * 5 + 10;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('Property Details:', mg, y);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+
+    function addDetail(label, value){
+        if(value){
+            doc.setFont('helvetica', 'bold');
+            doc.text(label + ': ', mg, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(value, mg + 45, y);
+            y += 5.5;
+        }
+    }
+    addDetail('Hotel Name', hotelName);
+    addDetail('Company Name', hotelCompany);
+    addDetail('Address', hotelAddress);
+    addDetail('Latitude', lat);
+    addDetail('Longitude', long_);
+    addDetail('Owner', ownerName);
+    addDetail('Designation', designation);
+    addDetail('Mobile', mobile);
+    addDetail('Phone', phone);
+    addDetail('Email', email);
+    addDetail('Website', website);
+    y += 5;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('Distribution Company Details:', mg, y);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    addDetail('Company', companyName);
+    addDetail('Phone', companyPhone);
+    addDetail('Email', companyEmail);
+    addDetail('Website', companyWebsite);
+    y += 10;
+
+    if(y > 250){ doc.addPage(); y = 20; }
+    doc.setFont('helvetica', 'normal');
+    doc.text('Sincerely,', mg, y);
+    y += 12;
+    doc.setFont('helvetica', 'bold');
+    doc.text(ownerName, mg, y);
+    y += 5;
+    doc.setFont('helvetica', 'normal');
+    if(designation) doc.text(designation, mg, y);
+    y += 5;
+    if(mobile) doc.text('Mobile: ' + mobile, mg, y);
+
+    doc.setFontSize(7);
+    doc.setTextColor(150,150,150);
+    doc.text('Generated by FabHotels OCM Generator', mg, 285);
+
+    doc.save('FabHotel ' + hotelName + ' NOC.pdf');
+    showToast('NOC PDF downloaded!');
+}
+
+/* Bulk OCM: Download current document as PDF */
+function downloadCurrentBulkOCMPDF(){
+    if(typeof bulkOcmDataList === 'undefined' || !bulkOcmDataList || bulkOcmDataList.length === 0){
+        showToast('No bulk OCM data available');
+        return;
+    }
+    var idx = (typeof bulkOcmIndex !== 'undefined') ? bulkOcmIndex : 0;
+    var d = bulkOcmDataList[idx];
+    if(!d){ showToast('No document at current index'); return; }
+    var {jsPDF} = window.jspdf;
+    var doc = new jsPDF();
+    var format = d.format || selectedFormat || 1;
+    if(format === 1) generateFormat1(doc, d);
+    else if(format === 2) generateFormat2(doc, d);
+    else generateFormat3(doc, d);
+    doc.save('FabHotel ' + (d.hotelName || 'OCM') + ' OCM.pdf');
+    showToast('Bulk OCM PDF downloaded!');
+}
+
+/* Bulk NOC: Download current document as PDF */
+function downloadCurrentBulkNOCPDF(){
+    if(typeof bulkNocDataList === 'undefined' || !bulkNocDataList || bulkNocDataList.length === 0){
+        showToast('No bulk NOC data available');
+        return;
+    }
+    var idx = (typeof bulkNocCurrentIndex !== 'undefined') ? bulkNocCurrentIndex : 0;
+    var d = bulkNocDataList[idx];
+    if(!d){ showToast('No document at current index'); return; }
+    var {jsPDF} = window.jspdf;
+    var doc = new jsPDF();
+    var mg = 20;
+    var pageWidth = 210;
+    var bodyWidth = pageWidth - (mg * 2);
+    var y = 20;
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('NO OBJECTION CERTIFICATE', pageWidth / 2, y, {align: 'center'});
+    y += 10;
+    doc.setFontSize(10);
+    doc.text(d.exhibit || 'EXHIBIT-1', pageWidth / 2, y, {align: 'center'});
+    y += 12;
+    if(d.date){
+        doc.setFont('helvetica', 'normal');
+        doc.text('Date: ' + d.date, mg, y);
+        y += 12;
+    }
+    doc.setFont('helvetica', 'bold');
+    doc.text('To Whom It May Concern,', mg, y);
+    y += 10;
+    doc.setFont('helvetica', 'normal');
+
+    var p1 = 'I, the undersigned, ' + (d.ownerName||'') + ', ' + (d.designation||'') + ' of ' + (d.hotelName||'') + ', located at ' + (d.address||'') + (d.lat ? ', GPS Coordinates: ' + d.lat + ', ' + d.long : '') + ', do hereby certify that I have no objection to ' + (d.companyName||'') + ' (including but not limited to their brands such as FabHotels) for the listing and distribution of room inventory and rates of my property on various Online Travel Agencies (OTAs) and other distribution channels.';
+    var l1 = doc.splitTextToSize(p1, bodyWidth);
+    doc.text(l1, mg, y);
+    y += l1.length * 5 + 5;
+
+    var p2 = 'I further authorize ' + (d.companyName||'') + ' to manage the online distribution of my property including but not limited to: listing on OTAs, managing rates and inventory, responding to guest queries, and managing reviews and ratings across platforms.';
+    var l2 = doc.splitTextToSize(p2, bodyWidth);
+    doc.text(l2, mg, y);
+    y += l2.length * 5 + 5;
+
+    var p3 = 'This authorization is valid from the date of this letter and shall remain in effect until revoked in writing by either party.';
+    var l3 = doc.splitTextToSize(p3, bodyWidth);
+    doc.text(l3, mg, y);
+    y += l3.length * 5 + 10;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('Property Details:', mg, y);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+
+    function addDet(label, val){
+        if(val){ doc.setFont('helvetica','bold'); doc.text(label+': ', mg, y); doc.setFont('helvetica','normal'); doc.text(String(val), mg+45, y); y += 5.5; }
+    }
+    addDet('Hotel Name', d.hotelName);
+    addDet('Address', d.address);
+    addDet('Owner', d.ownerName);
+    addDet('Designation', d.designation);
+    addDet('Mobile', d.mobile);
+    addDet('Phone', d.phone);
+    addDet('Email', d.email);
+    addDet('Website', d.website);
+    y += 5;
+
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(11);
+    doc.text('Distribution Company Details:', mg, y);
+    y += 7;
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(10);
+    addDet('Company', d.companyName);
+    addDet('Phone', d.companyPhone);
+    addDet('Email', d.companyEmail);
+    addDet('Website', d.companyWebsite);
+    y += 10;
+
+    if(y > 250){ doc.addPage(); y = 20; }
+    doc.setFont('helvetica','normal');
+    doc.text('Sincerely,', mg, y);
+    y += 12;
+    doc.setFont('helvetica','bold');
+    doc.text(d.ownerName || '', mg, y);
+    y += 5;
+    doc.setFont('helvetica','normal');
+    if(d.designation) doc.text(d.designation, mg, y);
+    y += 5;
+    if(d.mobile) doc.text('Mobile: ' + d.mobile, mg, y);
+
+    doc.setFontSize(7);
+    doc.setTextColor(150,150,150);
+    doc.text('Generated by FabHotels OCM Generator', mg, 285);
+
+    doc.save('FabHotel ' + (d.hotelName || 'NOC') + ' NOC.pdf');
+    showToast('Bulk NOC PDF downloaded!');
+}
+
 </script>
 </main>
 </body>
