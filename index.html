@@ -301,7 +301,8 @@
 
 
 .form-section-title{font-size:13px;font-weight:700;color:var(--text,#374151);margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border,#e5e7eb)}
-.field-error{color:#dc2626;font-size:11px;margin-top:2px;min-height:14px}.skip-link{position:absolute;top:-100%;left:0;background:var(--primary,#1a1a4e);color:#fff;padding:12px 20px;z-index:10000;font-weight:600;text-decoration:none;border-radius:0 0 8px 0;transition:top .2s}.skip-link:focus{top:0}</style>
+.field-error{color:#dc2626;font-size:11px;margin-top:2px;min-height:14px}.skip-link{position:absolute;top:-100%;left:0;background:var(--primary,#1a1a4e);color:#fff;padding:12px 20px;z-index:10000;font-weight:600;text-decoration:none;border-radius:0 0 8px 0;transition:top .2s}.skip-link:focus{top:0}.form-fieldset{border:1px solid var(--border,#e5e7eb);border-radius:8px;padding:16px;margin:0 0 16px;min-width:0}.form-fieldset legend{font-size:13px;font-weight:700;color:var(--text,#374151);padding:0 8px;margin-bottom:12px}
+</style>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -349,6 +350,7 @@
             <div class="format-option" data-format="3"><h2>Format 3</h2><p>Zoho Mail print (Casa Stays2 Pvt Ltd)</p></div>
         </div>
         <form id="ocmForm">
+            <fieldset class="form-fieldset"><legend>Property Details</legend>
             <div class="form-group">
                 <label for="ownerName">Owner Name</label>
                 <input type="text" id="ownerName" placeholder="e.g. AJAY BASUDEO YADAV" required>
@@ -370,6 +372,8 @@
                 <div class="field-error" id="err-city">&#9888;&#65039; City is required</div>
             </div>
             <div class="form-group">
+            </fieldset>
+            <fieldset class="form-fieldset"><legend>Authorization</legend>
                 <label for="authHour">Authorization Date &amp; Time</label>
                 <div class="datetime-combo">
                     <input type="date" id="authDate" aria-label="Authorization Date" required>
@@ -385,6 +389,8 @@
                     </div>
                 </div>
             </div>
+            </fieldset>
+            <fieldset class="form-fieldset"><legend>Contact Information</legend>
             <div class="row">
                 <div class="form-group field-email">
                     <label for="ownerEmail">Owner Email</label>
@@ -397,6 +403,8 @@
                     <div class="field-error" id="err-ownerPhone">&#9888;&#65039; Owner phone is required</div>
                 </div>
             </div>
+            </fieldset>
+            <fieldset class="form-fieldset"><legend>Email Content</legend>
             <div class="form-group">
                 <label for="emailSubject">Email Subject</label>
                 <input type="text" id="emailSubject" value="Letter of Authorization">
@@ -411,6 +419,7 @@
                 <input type="email" id="recipientEmail" value="kiran.kumar@fabhotels.com">
                 <div class="field-error" id="err-recipientEmail">&#9888;&#65039; Recipient email is required</div>
             </div>
+            </fieldset>
             <div id="validationBanner" class="validation-banner">
                 <div class="banner-title">&#9888;&#65039; Please fix the following:</div>
                 <ul id="validationErrors"></ul>
@@ -606,7 +615,7 @@
             </div>
 
             <div id="nocForm">
-                <div class="form-section-title">Hotel Details</div>
+                <fieldset class="form-fieldset"><legend>Hotel Details</legend>
                 <div class="form-row">
                     <div class="form-group"><label for="nocHotelName">Hotel Name *</label><input type="text" id="nocHotelName" placeholder="e.g. Hotel Bash"><div class="field-error" id="err-nocHotelName"></div></div>
                 </div>
@@ -621,7 +630,7 @@
                     <div class="form-group"><label for="nocLong">Longitude</label><input type="text" id="nocLong" placeholder="77.516587"></div>
                 </div>
 
-                <div class="form-section-title">Owner Details</div>
+                <fieldset class="form-fieldset"><legend>Owner Details</legend>
                 <div class="form-row">
                     <div class="form-group"><label for="nocOwnerName">Owner Full Name *</label><input type="text" id="nocOwnerName" placeholder="Boregowdanadoddi Puttamadegowda Mari Swamy"><div class="field-error" id="err-nocOwnerName"></div></div>
                 </div>
@@ -637,7 +646,7 @@
                     <div class="form-group"><label for="nocWebsite">Website</label><input type="text" id="nocWebsite" placeholder="NA"></div>
                 </div>
 
-                <div class="form-section-title">Distribution Company Details</div>
+                <fieldset class="form-fieldset"><legend>Distribution Company Details</legend>
                 <div class="form-row">
                     <div class="form-group"><label for="nocCompanyName">Company Name</label><input type="text" id="nocCompanyName" value="Travelstack Tech Limited"></div>
                 </div>
@@ -649,7 +658,7 @@
                     <div class="form-group"><label for="nocCompanyWebsite">Company Website</label><input type="text" id="nocCompanyWebsite" value="www.fabhotels.com"></div>
                 </div>
 
-                <div class="form-section-title">Document Settings</div>
+                <fieldset class="form-fieldset"><legend>Document Settings</legend>
                 <div class="form-row two-col">
                     <div class="form-group"><label for="nocDate">NOC Date *</label><input type="date" id="nocDate" value="2026-06-06"><div class="field-error" id="err-nocDate"></div></div>
                     <div class="form-group"><label for="nocExhibit">Exhibit Number</label><input type="text" id="nocExhibit" value="EXHIBIT-1"></div>
@@ -700,6 +709,7 @@
                         </button>
                     </div>
                 </div>
+            </fieldset>            </fieldset>            </fieldset>            </fieldset>
                 <div id="nocPreview" class="email-preview" style="white-space:pre-wrap;font-family:Georgia,serif;line-height:1.7;padding:24px;background:var(--bg-card,#fff);border:1px solid var(--border,#e5e7eb);border-radius:8px;margin-top:8px"></div>
                 <div class="noc-editable-hint">Click any field to edit before downloading</div>
             </div>
