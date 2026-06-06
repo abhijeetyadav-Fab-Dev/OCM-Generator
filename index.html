@@ -301,9 +301,11 @@
 
 
 .form-section-title{font-size:13px;font-weight:700;color:var(--text,#374151);margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border,#e5e7eb)}
-.field-error{color:#dc2626;font-size:11px;margin-top:2px;min-height:14px}</style>
+.field-error{color:#dc2626;font-size:11px;margin-top:2px;min-height:14px}.skip-link{position:absolute;top:-100%;left:0;background:var(--primary,#1a1a4e);color:#fff;padding:12px 20px;z-index:10000;font-weight:600;text-decoration:none;border-radius:0 0 8px 0;transition:top .2s}.skip-link:focus{top:0}</style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<main id="main-content">
 <div class="container">
     <div class="theme-bar">
         <button id="themeToggle" class="theme-btn" title="Toggle dark/light mode" aria-label="Toggle dark mode">
@@ -342,9 +344,9 @@
     <!-- TAB 1: Single OCM -->
     <div id="tab-single" class="tab-content active">
         <div class="format-selector">
-            <div class="format-option active" data-format="1"><h3>Format 1</h3><p>Direct mail to FabHotels (TRAVELSTACK TECH LIMITED)</p></div>
-            <div class="format-option" data-format="2"><h3>Format 2</h3><p>Forwarded mail (OTA listing, remove parallel listings)</p></div>
-            <div class="format-option" data-format="3"><h3>Format 3</h3><p>Zoho Mail print (Casa Stays2 Pvt Ltd)</p></div>
+            <div class="format-option active" data-format="1"><h2>Format 1</h2><p>Direct mail to FabHotels (TRAVELSTACK TECH LIMITED)</p></div>
+            <div class="format-option" data-format="2"><h2>Format 2</h2><p>Forwarded mail (OTA listing, remove parallel listings)</p></div>
+            <div class="format-option" data-format="3"><h2>Format 3</h2><p>Zoho Mail print (Casa Stays2 Pvt Ltd)</p></div>
         </div>
         <form id="ocmForm">
             <div class="form-group">
@@ -419,7 +421,7 @@
             </div>
         </form>
         <div id="emailSection" class="email-section" style="display:none;">
-            <h3>&#128231; Email Integration</h3>
+            <h2>&#128231; Email Integration</h2>
             <div class="email-actions">
                 <button class="btn-success btn-small" id="emailMailto">&#128232; Open in Email Client</button>
                 <button class="btn-secondary btn-small" id="emailCopyBody">&#128203; Copy Email Body</button>
@@ -482,7 +484,7 @@
         <div id="csvWarnings" style="display:none"></div>
                     <div id="autofillInfoOcm"></div>
             <div id="csvMappingSection" style="display:none;">
-            <h3 style="font-size:15px;margin-bottom:12px;">Map CSV Columns</h3>
+            <h2 style="font-size:15px;margin-bottom:12px;">Map CSV Columns</h2>
             <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Match your CSV columns to the OCM fields. Fields marked * are required.</p>
             <div id="csvMappingFields"></div>
             <div class="row" style="margin-bottom:12px;">
@@ -513,7 +515,7 @@
         <!-- Bulk OCM Preview Panel -->
         <div id="bulkOcmPreviewPanel" style="display:none">
             <div class="preview-header">
-                <h3 style="font-size:15px;font-weight:700;margin:0">Bulk OCM Preview</h3>
+                <h2 style="font-size:15px;font-weight:700;margin:0">Bulk OCM Preview</h2>
                 <div class="preview-header-actions" style="display:flex;gap:6px;flex-wrap:wrap">
                     <button onclick="backToBulkOCM()" style="padding:6px 14px;border:1px solid var(--border,#d1d5db);border-radius:6px;background:var(--bg-card,#fff);color:var(--text-secondary,#6b7280);font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -550,7 +552,7 @@
 
     <!-- TAB 3: Custom Template -->
     <div id="tab-template" class="tab-content">
-        <h3 style="font-size:15px;margin-bottom:4px;">Customize PDF Template</h3>
+        <h2 style="font-size:15px;margin-bottom:4px;">Customize PDF Template</h2>
         <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">Adjust colors, fonts, and layout. Changes apply to new PDFs generated from the Single OCM tab.</p>
         <div class="template-grid">
             <div class="form-group">
@@ -671,7 +673,7 @@
 
             <div id="nocPreviewPanel" style="display:none">
                 <div class="preview-header">
-                    <h3 style="margin:0;font-size:15px">NOC Preview</h3>
+                    <h2 style="margin:0;font-size:15px">NOC Preview</h2>
                     <div style="display:flex;gap:6px">
                         <button class="btn-secondary btn-sm" onclick="backToNOCForm()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -735,7 +737,7 @@
             
             <div id="bulkNocPreviewPanel" style="display:none">
                 <div class="preview-header">
-                    <h3 style="font-size:15px;font-weight:700;margin:0">Bulk NOC Preview</h3>
+                    <h2 style="font-size:15px;font-weight:700;margin:0">Bulk NOC Preview</h2>
                     <div class="preview-header-actions">
                         <button onclick="backToBulkNOC()" style="padding:6px 14px;border:1px solid var(--border,#d1d5db);border-radius:6px;background:var(--bg-card,#fff);color:var(--text-secondary,#6b7280);font-size:12px;font-weight:600;cursor:pointer">← Back</button>
                         <button onclick="resetBulkNOCFields()" style="padding:6px 14px;border:1px solid var(--border,#d1d5db);border-radius:6px;background:var(--bg-card,#fff);color:var(--text-secondary,#6b7280);font-size:12px;font-weight:600;cursor:pointer">Reset</button> <button class="diff-toggle-btn" onclick="showDiffView()" title="Show changes comparison">
@@ -774,7 +776,7 @@
 
 <div id="tab-history" class="tab-content">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-            <h3 style="font-size:15px;">Saved OCMs</h3>
+            <h2 style="font-size:15px;">Saved OCMs</h2>
             <span class="history-count" id="historyCount"></span>
         </div>
         <div class="history-search" style="margin-bottom:12px;">
@@ -796,7 +798,7 @@
     <!-- Diff View Overlay -->
 <div id="diffOverlay" class="diff-overlay" onclick="if(event.target===this)closeDiffView()">
     <div class="diff-modal">
-        <h3>
+        <h2>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
             <span id="diffTitle">Changes Comparison</span>
             <button class="diff-close" onclick="closeDiffView()">&times;</button>
@@ -807,7 +809,7 @@
 <div id="toast" class="email-toast">
 <div id="confirmModal" class="confirm-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
   <div class="confirm-modal">
-    <h3 id="confirmModalTitle">Clear All History?</h3>
+    <h2 id="confirmModalTitle">Clear All History?</h2>
     <p>This will permanently delete all saved OCMs from history. You can undo this action immediately after.</p>
     <div class="confirm-modal-actions">
       <button class="confirm-cancel" id="confirmModalCancel">Cancel</button>
@@ -2023,5 +2025,6 @@ function redoNOCEdit() { redoEdit(); }
     function undoBulkOCMEdit() { undoEdit(); }
     function redoBulkOCMEdit() { redoEdit(); }
 </script>
+</main>
 </body>
 </html>
