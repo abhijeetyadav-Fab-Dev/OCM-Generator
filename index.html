@@ -370,7 +370,7 @@
             <div class="form-group">
                 <label for="authHour">Authorization Date &amp; Time</label>
                 <div class="datetime-combo">
-                    <input type="date" id="authDate" required>
+                    <input type="date" id="authDate" aria-label="Authorization Date" required>
                     <div class="field-error" id="err-authDate" style="margin-top:8px;">&#9888;&#65039; Date is required</div>
                     <div class="time-picker">
                         <select id="authHour" aria-label="Hour"></select>
@@ -555,11 +555,11 @@
         <div class="template-grid">
             <div class="form-group">
                 <label for="tplBrandColor">Brand Color (headers)</label>
-                <div class="color-input-wrapper"><input type="color" id="tplBrandColor" value="#1a1a4e"><input type="text" id="tplBrandColorHex" value="#1a1a4e" maxlength="7"></div>
+                <div class="color-input-wrapper"><input type="color" id="tplBrandColor" value="#1a1a4e"><input type="text" id="tplBrandColorHex" value="#1a1a4e" maxlength="7" aria-label="Brand Color Hex Code"></div>
             </div>
             <div class="form-group">
                 <label for="tplTextColor">Body Text Color</label>
-                <div class="color-input-wrapper"><input type="color" id="tplTextColor" value="#000000"><input type="text" id="tplTextColorHex" value="#000000" maxlength="7"></div>
+                <div class="color-input-wrapper"><input type="color" id="tplTextColor" value="#000000"><input type="text" id="tplTextColorHex" value="#000000" maxlength="7" aria-label="Body Text Color Hex Code"></div>
             </div>
             <div class="form-group"><label for="tplLogoText">Logo Text</label><input type="text" id="tplLogoText" value="fabHOTELS"></div>
             <div class="form-group"><label for="tplSenderName">Sender Name</label><input type="text" id="tplSenderName" value="Abhijeet Yadav"></div>
@@ -778,7 +778,7 @@
             <span class="history-count" id="historyCount"></span>
         </div>
         <div class="history-search" style="margin-bottom:12px;">
-            <input type="text" id="historySearch" placeholder="Search by hotel name, owner, city..." style="padding:8px 12px;font-size:13px;width:100%;box-sizing:border-box;">
+            <input type="text" id="historySearch" aria-label="Search History" placeholder="Search by hotel name, owner, city..." style="padding:8px 12px;font-size:13px;width:100%;box-sizing:border-box;">
         </div>
         
         
