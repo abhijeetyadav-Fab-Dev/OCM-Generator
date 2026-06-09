@@ -1852,7 +1852,7 @@ function updateTemplatePreview(){const s=getTemplateSettings();document.getEleme
 
 ['tplLogoText','tplSenderName','tplSenderEmail','tplFontSize','tplLineSpacing','tplMargin','tplFooterText'].forEach(id=>{document.getElementById(id).addEventListener('input',updateTemplatePreview)});
 
-document.getElementById('tplSaveBtn').addEventListener('click',()=>{localStorage.setItem(TPL_KEY,JSON.stringify(getTemplateSettings()));showToast('Template saved!')});
+document.getElementById('tplSaveBtn').addEventListener('click',()=>{var s=getTemplateSettings();var fs=parseInt(s.fontSize)||11,ls=parseFloat(s.lineSpacing)||5.5,mg=parseInt(s.margin)||20;if(fs<8||fs>16){showToast('Font size must be between 8 and 16');return}if(ls<3||ls>8){showToast('Line spacing must be between 3 and 8');return}if(mg<10||mg>40){showToast('Margin must be between 10 and 40');return}if(!s.senderEmail||!s.senderEmail.includes('@')){showToast('Please enter a valid email address');return}if(!s.logoText){showToast('Logo text cannot be empty');return}if(!s.senderName){showToast('Sender name cannot be empty');return}localStorage.setItem(TPL_KEY,JSON.stringify(s));showToast('Template saved!')});
 
 document.getElementById('tplResetBtn').addEventListener('click',()=>{const d={brandColor:'#1a1a4e',textColor:'#000000',logoText:'fabHOTELS',senderName:'Abhijeet Yadav',senderEmail:'abhijeet.yadav@fabhotels.com',fontSize:'11',lineSpacing:'5.5',margin:'14',footerText:''};applyTemplateSettings(d);localStorage.setItem(TPL_KEY,JSON.stringify(d));showToast('Template reset to defaults')});
 
@@ -2748,6 +2748,7 @@ document.getElementById("tplSampleCsvBtn").addEventListener("click", (e) => {
 
 // Load Sample Template Config - fills template fields with sample values for quick testing
 function loadSampleTemplate() {
+
     document.getElementById('tplBrandColor').value = '#0d47a1';
     var hex1 = document.getElementById('tplBrandColorHex');
     if (hex1) hex1.value = '#0d47a1';
